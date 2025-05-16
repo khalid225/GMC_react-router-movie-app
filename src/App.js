@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { Container, Button } from "react-bootstrap";
@@ -6,14 +7,13 @@ import MovieList from "./components/MovieList";
 import Filter from "./components/Filter";
 import AddMovie from "./components/AddMovie";
 import EditMovieModal from "./components/EditMovie";
+import MovieDetail from "./components/MovieDetail";
 import initialMovies from "./data/movies";
 
 function App() {
 	const [movies, setMovies] = useState(initialMovies);
-
 	const [filter, setFilter] = useState({ title: "", rating: "" });
 	const [showAddModal, setShowAddModal] = useState(false);
-
 	const [editingMovie, setEditingMovie] = useState(null);
 	const [showEditModal, setShowEditModal] = useState(false);
 
@@ -60,32 +60,47 @@ function App() {
 	}, [movies, filter]);
 
 	return (
-		<Container className="App mt-5">
-			<h1 className="text-center mb-4">My Movie App</h1>
+		<Router>
+			<Container className="App mt-1">
+				<h1 className="text-center mb-4">My Movie App</h1>
+				<Routes>
+					<Route
+						path="/"
+						element={
+							<>
+								<Filter onFilterChange={handleFilterChange} />
 
-			<Filter onFilterChange={handleFilterChange} />
+								<div className="text-center mb-4">
+									<Button variant="success" onClick={handleShowAddModal}>
+										Add New Movie
+									</Button>
+								</div>
 
-			<div className="text-center mb-4">
-				<Button variant="success" onClick={handleShowAddModal}>
-					Add New Movie
-				</Button>
-			</div>
+								<MovieList
+									movies={filteredMovies}
+									onDelete={handleDeleteMovie}
+									onEdit={handleEditMovie}
+								/>
 
-			<MovieList movies={filteredMovies} onDelete={handleDeleteMovie} onEdit={handleEditMovie} />
+								<AddMovie
+									show={showAddModal}
+									handleClose={handleCloseAddModal}
+									handleAddMovie={handleAddMovie}
+								/>
 
-			<AddMovie
-				show={showAddModal}
-				handleClose={handleCloseAddModal}
-				handleAddMovie={handleAddMovie}
-			/>
-
-			<EditMovieModal
-				show={showEditModal}
-				handleClose={handleCloseEditModal}
-				movie={editingMovie} 
-				handleUpdateMovie={handleUpdateMovie}
-			/>
-		</Container>
+								<EditMovieModal
+									show={showEditModal}
+									handleClose={handleCloseEditModal}
+									movie={editingMovie}
+									handleUpdateMovie={handleUpdateMovie}
+								/>
+							</>
+						}
+					/>
+					<Route path="/movie/:id" element={<MovieDetail />} />
+				</Routes>
+			</Container>
+		</Router>
 	);
 }
 

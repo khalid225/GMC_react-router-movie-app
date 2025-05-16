@@ -7,6 +7,7 @@ function AddMovie({ show, handleClose, handleAddMovie }) {
 		description: "",
 		posterURL: "",
 		rating: "",
+		trailerLink: "",
 	});
 
 	const handleChange = (event) => {
@@ -18,7 +19,13 @@ function AddMovie({ show, handleClose, handleAddMovie }) {
 	};
 
 	const handleSubmit = () => {
-		if (newMovie.title && newMovie.description && newMovie.posterURL && newMovie.rating) {
+		if (
+			newMovie.title &&
+			newMovie.description &&
+			newMovie.posterURL &&
+			newMovie.rating &&
+			newMovie.trailerLink
+		) {
 			handleAddMovie({
 				...newMovie,
 				rating: parseFloat(newMovie.rating),
@@ -29,6 +36,7 @@ function AddMovie({ show, handleClose, handleAddMovie }) {
 				description: "",
 				posterURL: "",
 				rating: "",
+				trailerLink: "",
 			});
 			handleClose();
 		} else {
@@ -73,6 +81,17 @@ function AddMovie({ show, handleClose, handleAddMovie }) {
 							placeholder="Enter poster URL"
 							name="posterURL"
 							value={newMovie.posterURL}
+							onChange={handleChange}
+						/>
+					</Form.Group>
+
+					<Form.Group className="mb-3" controlId="formTrailerURL">
+						<Form.Label>Trailer URL</Form.Label>
+						<Form.Control
+							type="text"
+							placeholder="Enter Trailer URL"
+							name="trailerURL"
+							value={newMovie.trailerLink}
 							onChange={handleChange}
 						/>
 					</Form.Group>
